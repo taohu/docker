@@ -36,8 +36,8 @@ docs-shell: docs-build
 docs-release: docs-build
 	$(DOCKER_RUN_DOCS) -e BUILD_ROOT "$(DOCKER_DOCS_IMAGE)" ./release.sh
 
-test: build
-	$(DOCKER_RUN_DOCKER) hack/make.sh binary cross test-unit test-integration test-integration-cli
+test: binary
+	$(DOCKER_RUN_DOCKER) hack/make.sh cross test-unit test-integration test-integration-cli
 
 test-unit: build
 	$(DOCKER_RUN_DOCKER) hack/make.sh test-unit
