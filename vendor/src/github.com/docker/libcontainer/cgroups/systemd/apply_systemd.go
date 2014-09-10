@@ -12,6 +12,7 @@ import (
 	"strings"
 	"sync"
 	"time"
+	"errors"
 
 	systemd "github.com/coreos/go-systemd/dbus"
 	"github.com/docker/libcontainer/cgroups"
@@ -120,6 +121,11 @@ func Apply(c *cgroups.Cgroup, pid int) (cgroups.ActiveCgroup, error) {
 	if c.CpuShares != 0 {
 		properties = append(properties,
 			systemd.Property{"CPUShares", dbus.MakeVariant(uint64(c.CpuShares))})
+	}
+
+	// xxx TODO: CPUQuota and CPUPeriod not available in systemd
+	if c.CpuQuota != 0 {
+		return nil, errors.New("CPUQuota and CPUPeriod not supported by systemd")
 	}
 
 	if _, err := theConn.StartTransientUnit(unitName, "replace", properties...); err != nil {

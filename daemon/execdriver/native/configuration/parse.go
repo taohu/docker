@@ -9,6 +9,7 @@ import (
 
 	"github.com/docker/docker/pkg/units"
 	"github.com/docker/libcontainer"
+	"github.com/docker/docker/pkg/log"
 )
 
 type Action func(*libcontainer.Config, interface{}, string) error
@@ -169,12 +170,17 @@ func joinNetNamespace(container *libcontainer.Config, context interface{}, value
 //
 // TODO: this can be moved to a general utils or parser in pkg
 func ParseConfiguration(container *libcontainer.Config, running map[string]*exec.Cmd, opts []string) error {
+	log.Infof("-------ParseConfiguration")
+	for _, opt := range opts {
+		log.Infof("-------opt: %s", opt)
+	}
 	for _, opt := range opts {
 		kv := strings.SplitN(opt, "=", 2)
 		if len(kv) < 2 {
 			return fmt.Errorf("invalid format for %s", opt)
 		}
 
+		fmt.Errorf("-------kv[0]: %s", kv[0])
 		action, exists := actions[kv[0]]
 		if !exists {
 			return fmt.Errorf("%s is not a valid option for the native driver", kv[0])

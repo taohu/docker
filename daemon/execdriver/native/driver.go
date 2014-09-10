@@ -23,6 +23,7 @@ import (
 	consolepkg "github.com/docker/libcontainer/console"
 	"github.com/docker/libcontainer/namespaces"
 	"github.com/docker/libcontainer/system"
+	"github.com/docker/docker/pkg/log"
 )
 
 const (
@@ -98,6 +99,8 @@ func (d *driver) Run(c *execdriver.Command, pipes *execdriver.Pipes, startCallba
 	if err := d.writeContainerFile(container, c.ID); err != nil {
 		return -1, err
 	}
+
+	log.Infof("-------cpu quota/period: %d/%d", container.Cgroups.CpuQuota, container.Cgroups.CpuPeriod)
 
 	return namespaces.Exec(container, c.ProcessConfig.Stdin, c.ProcessConfig.Stdout, c.ProcessConfig.Stderr, c.ProcessConfig.Console, c.Rootfs, dataPath, args, func(container *libcontainer.Config, console, rootfs, dataPath, init string, child *os.File, args []string) *exec.Cmd {
 		c.ProcessConfig.Path = d.initPath

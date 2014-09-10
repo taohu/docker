@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"syscall"
+	"fmt"
 
 	"github.com/docker/libcontainer"
 	"github.com/docker/libcontainer/cgroups"
@@ -158,10 +159,13 @@ func DefaultCreateCommand(container *libcontainer.Config, console, rootfs, dataP
 // SetupCgroups applies the cgroup restrictions to the process running in the container based
 // on the container's configuration
 func SetupCgroups(container *libcontainer.Config, nspid int) (cgroups.ActiveCgroup, error) {
+	fmt.Println("-------container.Cgroups: ", container.Cgroups)
 	if container.Cgroups != nil {
 		c := container.Cgroups
 
+		fmt.Println("-------SetupCgroups: cpu quota/period: ", c.CpuQuota, "/", c.CpuPeriod)
 		if systemd.UseSystemd() {
+			fmt.Println("-------systemd");
 			return systemd.Apply(c, nspid)
 		}
 

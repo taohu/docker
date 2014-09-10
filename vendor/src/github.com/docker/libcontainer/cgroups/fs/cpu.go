@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"fmt"
 
 	"github.com/docker/libcontainer/cgroups"
 )
@@ -24,13 +25,16 @@ func (s *CpuGroup) Set(d *data) error {
 			return err
 		}
 	}
+
+	fmt.Println("-------cpu Set: cpu period: ", strconv.FormatInt(d.c.CpuPeriod * 1000, 10));
 	if d.c.CpuPeriod != 0 {
-		if err := writeFile(dir, "cpu.cfs_period_us", strconv.FormatInt(d.c.CpuPeriod, 10)); err != nil {
+		if err := writeFile(dir, "cpu.cfs_period_us", strconv.FormatInt(d.c.CpuPeriod * 1000, 10)); err != nil {
 			return err
 		}
 	}
+	fmt.Println("-------cpu Set: cpu quota: ", strconv.FormatInt(d.c.CpuQuota * 1000, 10));
 	if d.c.CpuQuota != 0 {
-		if err := writeFile(dir, "cpu.cfs_quota_us", strconv.FormatInt(d.c.CpuQuota, 10)); err != nil {
+		if err := writeFile(dir, "cpu.cfs_quota_us", strconv.FormatInt(d.c.CpuQuota * 1000, 10)); err != nil {
 			return err
 		}
 	}

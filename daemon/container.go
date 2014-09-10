@@ -254,6 +254,8 @@ func populateCommand(c *Container, env []string) error {
 		CpuLimit:   c.Config.CpuLimit,
 	}
 
+	log.Infof("cpu limit: %d", resources.CpuLimit);
+
 	processConfig := execdriver.ProcessConfig{
 		Privileged: c.hostConfig.Privileged,
 		Entrypoint: c.Path,
