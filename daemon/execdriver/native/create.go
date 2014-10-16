@@ -5,7 +5,6 @@ package native
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
 
 	"github.com/docker/docker/daemon/execdriver"
@@ -65,13 +64,6 @@ func (d *driver) createContainer(c *execdriver.Command) (*libcontainer.Config, e
 	if err := d.setupLabels(container, c); err != nil {
 		return nil, err
 	}
-
-	cmds := make(map[string]*exec.Cmd)
-	d.Lock()
-	for k, v := range d.activeContainers {
-		cmds[k] = v.cmd
-	}
-	d.Unlock()
 
 	return container, nil
 }
