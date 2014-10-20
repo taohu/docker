@@ -2139,7 +2139,6 @@ func (cli *DockerCli) CmdCreate(args ...string) error {
 }
 
 func (cli *DockerCli) CmdRun(args ...string) error {
-	// FIXME: just use runconfig.Parse already
 	cmd := cli.Subcmd("run", "IMAGE [COMMAND] [ARG...]", "Run a command in a new container")
 
 	// These are flags not stored in Config/HostConfig
