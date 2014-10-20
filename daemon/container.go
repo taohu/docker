@@ -585,7 +585,10 @@ func (container *Container) KillSig(sig int) error {
 
 	// We could unpause the container for them rather than returning this error
 	if container.Paused {
-		return fmt.Errorf("Container %s is paused. Unpause the container before stopping", container.ID)
+		err := container.Unpause()
+		if err != nil {
+			return fmt.Errorf("Error on unpausing container %s", container.ID)
+		}
 	}
 
 	if !container.Running {
